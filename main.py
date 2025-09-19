@@ -143,12 +143,8 @@ while (True):
     #-----------------------------------FUNCIONAMENTO DOS SLIDERS--------------------------------------------#
     sliders1 = cv2.getTrackbarPos("Sm.FT", "CONTROL")               # responsável por aplicar os filtros de suavização
     sliders2 = cv2.getTrackbarPos("Morph.FT", "CONTROL")            # responsável por aplicar os filtros de morfologia
-    #sliders3 = cv2.getTrackbarPos("Matrix.Num", "CONTROL")          # responsável por definir a dimensão da matriz do elemento estruturante
     sliders5 = cv2.getTrackbarPos("Threshold", "CONTROL")           # responsável por aplicar o número do limiar na imagem
-    #sliders6 = cv2.getTrackbarPos("Color", "CONTROL")               # responsável por fazer com que somente a cor amarela ou azul seja identificada na imagem
-    #sliders7 = cv2.getTrackbarPos("Ar.Cross", "CONTROL")            # responsável por exibir as cruzes de acordo com a área definida
-    #sliders8 = cv2.getTrackbarPos("Ar.Square", "CONTROL")           # responsável por exibir os quadrados de acordo com a área definida
-    #sliders9 = cv2.getTrackbarPos("Ar.Circle", "CONTROL")           # responsável por exibir os círculos de acordo com a área definida
+
 
     #--------------------------------------------------------------------------------------------------------#
 
