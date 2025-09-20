@@ -2,12 +2,10 @@ import cv2
 import numpy as np
 
 
-def findContour(contour, img):
+def findContour(contour):
     min_area = 1000
 
     approx = cv2.approxPolyDP(contour, 0.01*cv2.arcLength(contour, True), True)
-
-    x, y, _, _ = cv2.boundingRect(approx)
 
     name_contour = None
     color = None
@@ -20,7 +18,7 @@ def findContour(contour, img):
     elif (len(approx) == 12 and cv2.contourArea(contour) >= min_area):
 
         name_contour = "Cross"
-        print("ENTREI")
+        #print("ENTREI")
         color = (0, 255, 0)
 
 
@@ -30,8 +28,40 @@ def findContour(contour, img):
         color = (255, 0, 0)
 
     
-    if(name_contour in ["Square", "Cross", "Circle"]):
+    # if(name_contour in ["Square", "Cross", "Circle"]):
         
+    #     #verifica a existência do objeto com base na quantidade de pixels que possui
+    #     centro_x = None
+    #     centro_y = None 
+
+    #     M = cv2.moments(contour)
+    #     if M["m00"] != 0:   # Evita divisão por zero
+    #         centro_x = int(M["m10"] / M["m00"])
+    #         centro_y = int(M["m01"] / M["m00"])
+
+    #     cv2.drawContours(img, [approx], -1, color, 2)
+    #     cv2.putText(img, name_contour, (x,y), cv2.FONT_HERSHEY_COMPLEX, 1, (0, 127, 255))
+
+    #     if (centro_x != None) and (centro_y != None):
+    #         cv2.circle(img,(centro_x, centro_y), 5,(0, 127, 255),-1)
+
+    return (name_contour, color, approx)
+
+
+
+    
+
+#========================================================================================#
+'''Função responsável por determinar a forma geométrica com base no contorno já encontrado.'''
+#========================================================================================#
+
+def findShapes(contours, img, hierarquia):
+
+    def draw_contour(name_contour, color, approx, img, contour):
+        print("ENTREIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII")
+        
+        x, y, _, _ = cv2.boundingRect(approx)
+
         #verifica a existência do objeto com base na quantidade de pixels que possui
         centro_x = None
         centro_y = None 
@@ -42,101 +72,81 @@ def findContour(contour, img):
             centro_y = int(M["m01"] / M["m00"])
 
         cv2.drawContours(img, [approx], -1, color, 2)
-        cv2.putText(img, name_contour, (x,y), cv2.FONT_HERSHEY_COMPLEX, 1, (0, 127, 255))
+        cv2.putText(img, name_contour, (x,y), cv2.FONT_HERSHEY_COMPLEX, 1, color)
 
         if (centro_x != None) and (centro_y != None):
-            cv2.circle(img,(centro_x, centro_y), 5,(0, 127, 255),-1)
+            cv2.circle(img,(centro_x, centro_y), 5, color ,-1)
 
-    return name_contour
-
-
-
-    
-
-
-'''Função responsável por determinar a forma geométrica com base no contorno já encontrado.'''
-
-def findShapes(contours, img, hierarquia):
-
-    #---------------------------------------------------------------------------------#
-    #---------------------------------------------------------------------------------#
-    # def findContour(contour):
-        
-    #     min_area = 1000
-
-    #     approx = cv2.approxPolyDP(contour, 0.01*cv2.arcLength(contour, True), True)
-
-    #     x, y, _, _ = cv2.boundingRect(approx)
-
-    #     name_contour = None
-    #     color = None
-
-    #     if (len(approx) == 4 and cv2.contourArea(contour) >= min_area):
-    #         name_contour = "Square"
-    #         color = (0, 0, 255)
-
-    #     elif (len(approx) == 12 and cv2.contourArea(contour) >= min_area):
-    #         name_contour = "Cross"
-    #         print("ENTREI")
-    #         color = (0, 255, 0)
-
-    #     elif (len(approx) > 12 and cv2.contourArea(contour) >= min_area):
-    #         name_contour = "Circle"
-    #         color = (255, 0, 0)
-        
-    #     return (name_contour, color)
-    #---------------------------------------------------------------------------------#
-    #---------------------------------------------------------------------------------#
 
     for i, contour in enumerate(contours):
         # approx = cv2.approxPolyDP(contour, 0.01*cv2.arcLength(contour, True), True)
 
-        index_parent_contour = hierarquia[0][i][3]
 
-        # #verifica a existência do objeto com base na quantidade de pixels que possui
-        # centro_x = None
-        # centro_y = None 
+        index_parent_contour = hierarquia[0][i][3] # tem 2 tipos de retorno: 1 ou -1;
+        # index_parent_contour = -1 significa que o atual contorno(contorno de indice i) não está contido dentro de um contorno maior, ou seja, não tem pai
+        # index_parent_contour =! -1 significa que o atual contorno(contorno de indice i) está contido dentro de um contorno maior, ou seja, ele tem um pai
+        index_son_contour = hierarquia[0][i][2]
 
-        # M = cv2.moments(contour)
-        # if M["m00"] != 0:   # Evita divisão por zero
-        #     centro_x = int(M["m10"] / M["m00"])
-        #     centro_y = int(M["m01"] / M["m00"])
+    
+        contourns_list = []
+        # pega todos os contornos que tem pai, ou seja, que está contido em algo
+        if ((index_parent_contour != -1) and (findContour(contour)[0] == "Circle") and (index_son_contour != -1)): #está verificando se o atual contorno (circulo) está contido dentro de algo e se contem algo
+            print("ASDADAASDDSASD")
 
-    #---------------------------------------------------------------------------------------------------#
-    # index_parent_contour = -1 significa que o atual contorno(contorno de indice i) não está contido dentro de um contorno maior, ou seja, não tem pai
-    # index_parent_contour =! -1 significa que o atual contorno(contorno de indice i) está contido dentro de um contorno maior, ou seja, ele tem um pai
+            corrent_contour = findContour(contour)
+            father_contour = findContour(contours[index_parent_contour])
+            son_contour = findContour(contours[index_son_contour])
 
-        if (index_parent_contour != -1 ): #está verificando se o atual contorno possui um pai e se esse atual contorno é um quadrado
-            findContour(contour, img)
-            
-            #figure = findContour(contours[index_parent_contour],img) #inicialmente assume o papel de contorno pai
-            #figure = findContour(contour,img)
+            print(father_contour[0])
+            print(son_contour[0])
+            #draw_contour(father_contour[0],father_contour[1],father_contour[2], img, contours[index_parent_contour])
+            #draw_contour(son_contour[0],son_contour[1],son_contour[2], img, contours[index_son_contour])
 
-            #if(figure[0] == "Square"):
-            #     figure = findContour(contour)
-                
-                # name_contour = figure[0]
-                # color = figure[1]
-                # x,y = figure[2], figure[3]
-                # approx = figure[4]
 
-                # if(name_contour in ["Square", "Cross", "Circle"]):
-                    
-                #     if(name_contour == "Cross"):
-                #         print("CROSS")
-
-                #     cv2.drawContours(img, [approx], -1, color, 2)
-                #     cv2.putText(img, name_contour, (x,y), cv2.FONT_HERSHEY_COMPLEX, 1, (0, 127, 255))
-
-                #     if (centro_x != None) and (centro_y != None):
-                #         cv2.circle(img,(centro_x, centro_y), 5,(0, 127, 255),-1)
-        
-        #elif(findContour(contour, img) == "Cross"):
-            #figure = findContour(contour,img)
+            if(father_contour[0] == "Square"):
+                if(son_contour[0] == "Cross"):
+                    draw_contour(father_contour[0],father_contour[1],father_contour[2], img, contours[index_parent_contour])
+                    draw_contour(corrent_contour[0],corrent_contour[1],corrent_contour[2], img, contour)
+                    draw_contour(son_contour[0],son_contour[1],son_contour[2], img, contours[index_son_contour])
 
 
 
-'''Função responsável por aplicar operações morfológicas na imagem.'''
+
+#========================================================================================#
+'''Função responsável por aplicar filtros de suavização na imagem de entrada'''
+#========================================================================================#
+
+def SmoothingFilters(value,img):
+
+    #FILTRO DE GAUSS
+    if value == 1:
+        mask = (5,5)
+        smoothing = 0
+        img = cv2.GaussianBlur(img, mask, smoothing)
+    
+    #FILTRO DE MÉDIA
+    elif value == 2:
+        mask = (5,5)
+        img = cv2.blur(img, mask)
+    
+    #FILTRO DE MEDIANA
+    elif value == 3:
+        smoothing = 5
+        img = cv2.medianBlur(img,smoothing)
+    
+    #FILTRO DE CANNY
+    elif value == 4:
+        thresold1 = 30    
+        thresold2 = 120 
+        maskSobel = 3 #valor padrão             
+        img = cv2.Canny(img, thresold1, thresold2, maskSobel)
+    
+    return img
+
+
+#========================================================================================#
+'''Função responsável por aplicar operações morfológicas na imagem de entrada.'''
+#========================================================================================#
 
 def MorphologyOperations(img, slider_value):
 
