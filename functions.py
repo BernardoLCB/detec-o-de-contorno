@@ -57,8 +57,10 @@ def findContour(contour):
 
 def findShapes(contours, img, hierarquia):
 
+    #============================================================================#
+    
     def draw_contour(name_contour, color, approx, img, contour):
-        print("ENTREIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII")
+        #print("ENTREIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII")
         
         x, y, _, _ = cv2.boundingRect(approx)
 
@@ -76,7 +78,9 @@ def findShapes(contours, img, hierarquia):
 
         if (centro_x != None) and (centro_y != None):
             cv2.circle(img,(centro_x, centro_y), 5, color ,-1)
-
+    
+    #============================================================================#
+    
 
     for i, contour in enumerate(contours):
         # approx = cv2.approxPolyDP(contour, 0.01*cv2.arcLength(contour, True), True)
@@ -91,14 +95,17 @@ def findShapes(contours, img, hierarquia):
         contourns_list = []
         # pega todos os contornos que tem pai, ou seja, que está contido em algo
         if ((index_parent_contour != -1) and (findContour(contour)[0] == "Circle") and (index_son_contour != -1)): #está verificando se o atual contorno (circulo) está contido dentro de algo e se contem algo
-            print("ASDADAASDDSASD")
+            #print("ASDADAASDDSASD")
 
             corrent_contour = findContour(contour)
             father_contour = findContour(contours[index_parent_contour])
             son_contour = findContour(contours[index_son_contour])
 
-            print(father_contour[0])
-            print(son_contour[0])
+            print(20*"-")
+            print(f"CONTORNO PAI --> {father_contour[0]}")
+            print(f"CONTORNO MISTO -->{corrent_contour[0]}")
+            print(F"CONTORNO FILHO -->{son_contour[0]}")
+            print(20*"-")
             #draw_contour(father_contour[0],father_contour[1],father_contour[2], img, contours[index_parent_contour])
             #draw_contour(son_contour[0],son_contour[1],son_contour[2], img, contours[index_son_contour])
 

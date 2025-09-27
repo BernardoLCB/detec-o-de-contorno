@@ -10,6 +10,7 @@ print(f"caminho --> {caminho_atual}")
 
 caminho_imagem_exemplos_dados = os.path.join(caminho_atual, "inputs", "chosen")
 caminho_imagem_exemplos_criados = os.path.join(caminho_atual, "inputs", "meus_inputs")
+caminho_videos = os.path.join(caminho_atual,"inputs","videos")
 
 print(f"caminho final até a imagem --> {caminho_imagem_exemplos_dados}")
 print(f"caminho final até a imagem --> {caminho_imagem_exemplos_criados}")
@@ -29,8 +30,8 @@ choice = 0
 
 if choice == 0:
     #cap = cv2.VideoCapture(0)
-    cap = cv2.VideoCapture("c:/Users/adm/Desktop/Vídeo do WhatsApp de 2025-09-06 à(s) 16.55.40_452aed8d.mp4")
-    frame_time = 100
+    cap = cv2.VideoCapture(caminho_videos+"/v3.mp4")
+    frame_time = 50
 else:
     frame_time = 300
 
@@ -39,8 +40,8 @@ else:
 cv2.namedWindow("CONTROL", cv2.WINDOW_NORMAL)
 cv2.namedWindow("IMAGEM-BINARIZADA / IMAGEM-CONTORNADA", cv2.WINDOW_NORMAL)
 
-cv2.createTrackbar("Sm.FT", "CONTROL", 0, 4, nothing)
-cv2.createTrackbar("Morph.FT", "CONTROL", 0, 7, nothing)
+cv2.createTrackbar("Sm.FT", "CONTROL", 1, 4, nothing)
+cv2.createTrackbar("Morph.FT", "CONTROL", 4, 7, nothing)
 #cv2.createTrackbar("Matrix.Num", "CONTROL", 0, 50, nothing)
 cv2.createTrackbar("Threshold", "CONTROL", 100, 255, nothing)
 #cv2.createTrackbar("Color", "CONTROL", 0, 2, nothing)
