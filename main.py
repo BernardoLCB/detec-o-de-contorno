@@ -26,12 +26,13 @@ def nothing(x):
 print("[ 0 ] --> DETECTAR USANDO A CAMERA")
 print("[ 1 ] --> DETECTAR UM ARQUIVO DE IMAGEM")
 
-choice = int(input("ESCOLHA UMA DAS OPCOES: "))
+#choice = int(input("ESCOLHA UMA DAS OPCOES: "))
+choice = 0
 
 if choice == 0:
     #cap = cv2.VideoCapture(0)
-    cap = cv2.VideoCapture(caminho_videos+"/v13.mp4")
-    frame_time = 200
+    cap = cv2.VideoCapture(caminho_videos+"/v17.mp4")
+    frame_time = 100
 else:
     frame_time = 300
 
@@ -172,11 +173,14 @@ while (True):
 
     #----------------------BINARIZANDO A IMAGEM PARA QUE POSSAMOS UTILIZAR O MÉTODO QUE ENCONTRA OS CONTORNOS-------------------#
 
-    _,sorce_image_binarized = cv2.threshold(sorce_image_morphology_operations, sliders5, 255, cv2.THRESH_BINARY) 
+
+    sorce_image_binarized = cv2.adaptiveThreshold(sorce_image_morphology_operations, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 7, 2)
+
+    #_,sorce_image_binarized = cv2.threshold(sorce_image_morphology_operations, sliders5, 255, cv2.THRESH_BINARY) 
 
     #----------------------ENCONTRANDO OS CONTORNOS NA IMAGEM BINARIZADA-------------------------------#
 
-    contours,hierarquia = cv2.findContours(sorce_image_binarized, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
+    contours,hierarquia = cv2.findContours(sorce_image_binarized, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
 
     #----------------------CHAMANDO O MÉTODO FINDSHAPES QUE ENCONTRARÁ OS CONTORNOS DOS OBJETOS----------------------#
 
