@@ -10,6 +10,7 @@ print(f"caminho --> {caminho_atual}")
 
 caminho_imagem_exemplos_dados = os.path.join(caminho_atual, "inputs", "chosen")
 caminho_imagem_exemplos_criados = os.path.join(caminho_atual, "inputs", "meus_inputs")
+caminho_imagem_base_com_lipobag = os.path.join(caminho_atual, "inputs", "base_com_lipobag")
 caminho_videos = os.path.join(caminho_atual,"inputs","videos")
 
 print(f"caminho final até a imagem --> {caminho_imagem_exemplos_dados}")
@@ -25,13 +26,12 @@ def nothing(x):
 print("[ 0 ] --> DETECTAR USANDO A CAMERA")
 print("[ 1 ] --> DETECTAR UM ARQUIVO DE IMAGEM")
 
-#choice = int(input("ESCOLHA UMA DAS OPCOES: "))
-choice = 0
+choice = int(input("ESCOLHA UMA DAS OPCOES: "))
 
 if choice == 0:
     #cap = cv2.VideoCapture(0)
-    cap = cv2.VideoCapture(caminho_videos+"/v3.mp4")
-    frame_time = 50
+    cap = cv2.VideoCapture(caminho_videos+"/v13.mp4")
+    frame_time = 200
 else:
     frame_time = 300
 
@@ -61,6 +61,11 @@ while (True):
         if not ret:
             print("nao iniciou")
             break
+    
+    elif choice == 1:
+        #sorce_image = cv2.imread(caminho_imagem_base_com_lipobag+"/1.jpg")
+        #sorce_image = cv2.imread(caminho_imagem_base_com_lipobag+"/2.jpg")
+        sorce_image = cv2.imread(caminho_imagem_base_com_lipobag+"/3.jpg")
         
     
 

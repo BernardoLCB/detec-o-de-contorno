@@ -13,19 +13,19 @@ def findContour(contour):
     if (len(approx) == 4 and cv2.contourArea(contour) >= min_area):
 
         name_contour = "Square"
-        color = (0, 0, 255)
+        color = (0, 0, 255) #vermelho
 
     elif (len(approx) == 12 and cv2.contourArea(contour) >= min_area):
 
         name_contour = "Cross"
         #print("ENTREI")
-        color = (0, 255, 0)
+        color = (0, 255, 0) #verde
 
 
     elif (len(approx) > 12 and cv2.contourArea(contour) >= min_area):
 
         name_contour = "Circle"
-        color = (255, 0, 0)
+        color = (255, 0, 0) #azul
 
     
     # if(name_contour in ["Square", "Cross", "Circle"]):
@@ -58,8 +58,8 @@ def findContour(contour):
 def findShapes(contours, img, hierarquia):
 
     #============================================================================#
-    
-    def draw_contour(name_contour, color, approx, img, contour):
+
+    def draw_contour(name_contour, color, approx, img, contour, ):
         #print("ENTREIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII")
         
         x, y, _, _ = cv2.boundingRect(approx)
@@ -73,7 +73,7 @@ def findShapes(contours, img, hierarquia):
             centro_x = int(M["m10"] / M["m00"])
             centro_y = int(M["m01"] / M["m00"])
 
-        cv2.drawContours(img, [approx], -1, color, 2)
+        cv2.drawContours(img, [approx], -1, color, 4)
         cv2.putText(img, name_contour, (x,y), cv2.FONT_HERSHEY_COMPLEX, 1, color)
 
         if (centro_x != None) and (centro_y != None):
@@ -101,20 +101,30 @@ def findShapes(contours, img, hierarquia):
             father_contour = findContour(contours[index_parent_contour])
             son_contour = findContour(contours[index_son_contour])
 
+            draw_contour(corrent_contour[0],corrent_contour[1],corrent_contour[2], img, contour)
+
             print(20*"-")
-            print(f"CONTORNO PAI --> {father_contour[0]}")
-            print(f"CONTORNO MISTO -->{corrent_contour[0]}")
-            print(F"CONTORNO FILHO -->{son_contour[0]}")
+            print(f"CONTORNO PAI --> {father_contour[0]} ; QUANTIDADE DE LADOS -->{len(father_contour[2])}")
+            print(f"CONTORNO MISTO -->{corrent_contour[0]} ; QUANTIDADE DE LADOS -->{len(corrent_contour[2])}")
+            print(F"CONTORNO FILHO -->{son_contour[0]}; QUANTIDADE DE LADOS -->{len(son_contour[2])} ")
             print(20*"-")
+            
             #draw_contour(father_contour[0],father_contour[1],father_contour[2], img, contours[index_parent_contour])
             #draw_contour(son_contour[0],son_contour[1],son_contour[2], img, contours[index_son_contour])
 
-
+            #focado na detecção do tipo 1 da base de pouso --> [ quadrado (circulo (cruz) ) ]
             if(father_contour[0] == "Square"):
                 if(son_contour[0] == "Cross"):
                     draw_contour(father_contour[0],father_contour[1],father_contour[2], img, contours[index_parent_contour])
                     draw_contour(corrent_contour[0],corrent_contour[1],corrent_contour[2], img, contour)
                     draw_contour(son_contour[0],son_contour[1],son_contour[2], img, contours[index_son_contour])
+            
+            #focado na detecção do tipo 2 da base de pouso --> [quadrado (circulo (circulo (cruz) ) )]
+            elif (father_contour[0]=="Circle"): #father_contour
+                index_parent_parent_contour = hierarquia[0][contours[index_parent_contour]][3]
+                
+                if(index_parent_parent_contour != -1): #significa que o pai do pai do contorno é algum contorno
+                    father_father_contour = 
 
 
 
