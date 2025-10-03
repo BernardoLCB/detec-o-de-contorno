@@ -1,3 +1,4 @@
+from sre_constants import SUCCESS
 import cv2
 from matplotlib.pyplot import draw
 import numpy as np
@@ -96,9 +97,9 @@ def findShapes(contours, img, hierarquia):
             print(f"CONTORNO MISTO -->{corrent_contour[0]} ; QUANTIDADE DE LADOS -->{len(corrent_contour[2])}")
             print(f"CONTORNO FILHO -->{son_contour[0]}; QUANTIDADE DE LADOS -->{len(son_contour[2])} ")
             
-            # draw_contour(father_contour[0],(0,0,0),father_contour[2], img, contours[index_parent_contour])
-            # draw_contour(corrent_contour[0],(0,0,0),corrent_contour[2], img, contour)
-            # draw_contour(son_contour[0],(255,0,255),son_contour[2], img, contours[index_son_contour])
+            draw_contour(father_contour[0],(0,0,0),father_contour[2], img, contours[index_parent_contour])
+            draw_contour(corrent_contour[0],(0,0,0),corrent_contour[2], img, contour)
+            draw_contour(son_contour[0],(0,0,0),son_contour[2], img, contours[index_son_contour])
 
             #_____________________________________________________________________________#
 
@@ -228,3 +229,51 @@ def MorphologyOperations(img, slider_value):
 
 
     return img
+
+
+def PoseEstimation(contorno = "opcional"):
+
+    # # definindo os pontos 3d do objeto de interesse
+    # dimensoes da lipogab: largura = 19,5cm = 0,195m ; comprimento = 8cm = 0,08m e altura = 7cm = 0,07m
+
+    pontos_3d_objeto = np.array([
+
+        [0,0,0]     # coordenada 1 INFERIOR-ESQUERDO (olhando de cima)
+        [0,0,0]     # coordenada 2 INFERIOR-DIREITO (olhando de cima)
+        [0,0,0]     # coordenada 3 SUPERIOR-DIREITO (olhando de cima)
+        [0,0,0]     # coordenada 4 SUPERIOR-ESQUERDO (olhando de cima)
+
+    ], dtype=np.float32)
+
+    #x, y, w, h = cv2.boundingRect(contorno)
+
+    # pontos_2d_detectados = np.array([
+
+    #     [x, y]     # ponto onde a coordenada 1 aparece na imagem
+    #     [x+w, y]     # ponto onde a coordenada 2 aparece na imagem
+    #     [x+w, y+h]     # ponto onde a coordenada 3 aparece na imagem
+    #     [x, y+h]     # ponto onde a coordenada 4 aparece na imagem
+
+    # ], dtaype = np.float32)
+    
+    pontos_2d_detectados = np.array([
+
+        [x1,y1]     # ponto onde a coordenada 1 aparece na imagem
+        [x2,y2]     # ponto onde a coordenada 2 aparece na imagem
+        [x3,y3]     # ponto onde a coordenada 3 aparece na imagem
+        [x4,y4]     # ponto onde a coordenada 4 aparece na imagem
+
+    ], dtaype = np.float32)
+
+    success, rvec, tvec = cv2.solvePnP(
+        pontos_3d_objeto,
+        pontos_2d_detectados,
+        camera_matriz,
+        dis_coeffs
+        )
+    
+    if success:
+        print(f"Posição: X={tvec[0][0]:.2f}m, Y={tvec[1][0]:.2f}m, Z={tvec[2][0]:.2f}m")
+        print(f"Distância: {tvec[2][0]:.2f} metros")
+
+    pass
