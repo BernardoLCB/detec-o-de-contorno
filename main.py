@@ -30,9 +30,9 @@ print("[ 1 ] --> DETECTAR UM ARQUIVO DE IMAGEM")
 choice = 0
 
 if choice == 0:
-    cap = cv2.VideoCapture(0)
-    #cap = cv2.VideoCapture(caminho_videos+"/v17.mp4")
-    frame_time = 100
+    #cap = cv2.VideoCapture(0)
+    cap = cv2.VideoCapture(caminho_videos+"/v25.mp4")
+    frame_time = 50
 else:
     frame_time = 300
 
