@@ -31,7 +31,7 @@ choice = 0
 
 if choice == 0:
     #cap = cv2.VideoCapture(0)
-    cap = cv2.VideoCapture(caminho_videos+"/v12.mp4")
+    cap = cv2.VideoCapture(caminho_videos+"/v20.mp4")
     frame_time = 50
 else:
     frame_time = 300
